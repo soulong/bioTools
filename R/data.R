@@ -15,3 +15,16 @@ NULL
 #' @format a data frame, tibble
 NULL
 
+
+#' tx2gene data for sequencing annotion
+#' @docType data
+#' @name tx2gene
+#' @format a data frame, tibble
+NULL
+
+
+#'  genes data for sequencing annotion
+#' @docType data
+#' @name genes
+#' @format a data frame, tibble
+NULL

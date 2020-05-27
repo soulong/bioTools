@@ -23,7 +23,7 @@ get_geneset_go <- function(species="hs",
                            min_size=5,
                            max_size=500,
                            evidence_exclude=c("NAS","NR","ND","IEA")
-) {
+                           ) {
 
   if(!species %in% c("hs", "mm")) stop("species must be one of hs, mm!")
   if(!all(ontology %in% c("BP","MF","CC"))) stop("ontology must be in BP, MF, CC!")
