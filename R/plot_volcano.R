@@ -5,18 +5,18 @@
 #' @description plot volcano plot for DESeq2 pariwise compare result
 #'
 #' @param res a data.drame from DESeq2 result
-#' @param title plot title
-#' @param baseMean_thred baseMean cutoff
-#' @param fc_thred foldchange cutoff
-#' @param padj_thred p.adjust cutoff
+#' @param fc_thred foldchange cutoff, corelated to log2FoldChange column, high value mean less filter
+#' @param padj_thred p.adjust cutoff, corelated to padj column, high value mean less filter
 #' @param size point size
 #' @param alpha point transparency
-#' @param xlim two element numeric vector, restrict x axis
-#' @param ylim two element numeric vector, restrict y axis
+#' @param title plot title
+#' @param xlim two element numeric vector, restrict x axis, default: NULL
+#' @param ylim two element numeric vector, restrict y axis, default: NULL
 #' @param ns_resampling numeric, downsampling NS points
 #' @param color three element character vector, map point color, ordered by down-regulated, ns, up-regulated
 #'
 #' @importFrom dplyr filter mutate if_else sample_n bind_rows %>%
+#' @importFrom rlang sym !!
 #' @import ggplot2
 #'
 #' @return ggplot2 object
@@ -24,18 +24,17 @@
 #' @export
 #'
 plot_volcano <- function(res,
-                         title="Volcano of DEGs",
-                         baseMean_thred=50,
                          fc_thred=2,
                          padj_thred=0.05,
                          size=1.5,
                          alpha=0.7,
+                         title="Volcano of DEGs",
                          xlim=NULL, # c(-5, 5)
                          ylim=NULL, # c(0, 20)
                          ns_resampling=1000,
                          color=c("#0571b0", "#bababa", "#ca0020")
                          ) {
-  df <- filter(res, baseMean > baseMean_thred, !is.na(entrezgene_id), !is.na(padj)) %>%
+  df <- filter(res, !is.na(entrezgene_id), !is.na(padj)) %>%
     mutate(`-log10(padj)`=-log10(padj))
   # take sig genes
   df.sig <- filter(df, padj < padj_thred, abs(log2FoldChange) > log2(fc_thred)) %>%
@@ -70,7 +69,7 @@ plot_volcano <- function(res,
     geom_vline(xintercept=c(-log2(fc_thred), log2(fc_thred)), linetype="dashed") +
     geom_hline(yintercept=-log10(padj_thred), linetype="dashed") +
     labs(x="log2 (FoldChange)", y="-log10 (p.adj)", title=title, subtitle=str_glue(
-           "padj_threshold: {padj_thred}, FoldChange_threshold: {fc_thred}, baseMean_threshold: {baseMean_thred}")) +
+           "padj_threshold: {padj_thred}, FoldChange_threshold: {fc_thred}")) +
     theme_linedraw()
 
   return(plot)
@@ -83,8 +82,8 @@ if(F) {
   res <- readxl::read_xlsx("/Users/hh/Desktop/2020-01-13_smartSeq_lung_EC_PC_HH/statistics/2020-01-15_wald_TEST_lps.pc_pbs.pc.xlsx")
 
   p <- plot_volcano(res)
-  cowplot::save_plot("~/Desktop/test.pdf", p, base_height = 3)
+  p
 
-  plot_volcano(res, xlim = c(-5, 5), ylim = c(0, 10))
+  plot_volcano(res, xlim = c(-10, 10), ylim = c(0, 15))
 
 }
