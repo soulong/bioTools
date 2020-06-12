@@ -4,10 +4,11 @@
 #' @description plot heatmap using complexHeatmap
 #'
 #' @param matrix matrix, with unique rownames and colnames
-#' @param group vecotr, used to anno column or cluster_withon_group, the order is same with matrix colname
+#' @param group vector, used to anno column or cluster_withon_group, the order is same with matrix colname
 #' @param scale_method character, scale method, one of "scale", "log1p", "none"
+#' @param row_cluster_type character, cluster row method, one of "auto",
 #' @param col_cluster_type character, cluster column method, one of "auto", "semi", "none"
-#' @param split_row_num integer, divide row cluster into how many sub-clusters
+#' @param split_row_num integer, divide row cluster into how many sub-clusters, using cutree method
 #' @param color_map numeric vector, heatmap color mapping cut, length must be same with color_palette
 #' @param color_palette character vector, color mapped to color_map, length must be same with color_map
 #' @param row_names_size integer, rownames size
@@ -16,10 +17,11 @@
 #' @param hclust_method hclust method, refer to hclust
 #' @param ... additional parameters pass to ComplexHeatmap::Heatmap
 #'
-#' @importFrom ComplexHeatmap Heatmap cluster_within_group
+#' @importFrom ComplexHeatmap Heatmap cluster_within_group row_order
 #' @importFrom dendextend color_branches
 #' @importFrom circlize colorRamp2
 #' @importFrom tibble rownames_to_column as_tibble
+#' @importFrom grid gpar
 #'
 #' @return a list, contain heatmap and scaled ordered heatmap data
 #'
@@ -29,6 +31,7 @@ plot_heatmap <- function(
   matrix,
   group=NULL,
   scale_method="scale",
+  row_cluster_type="auto",
   col_cluster_type="auto",
   split_row_num=1,
   color_map=c(-2, 0, 2),
@@ -79,10 +82,14 @@ plot_heatmap <- function(
 
   # row dendegram
   set.seed(123)
-  dend_row <- mat %>%
-    dist(method=dist_method) %>%
-    hclust(method=hclust_method) %>%
-    as.dendrogram()
+  if(row_cluster_type=="none") {
+    dend_row <- FALSE
+  } else {
+    dend_row <- mat %>%
+      dist(method=dist_method) %>%
+      hclust(method=hclust_method) %>%
+      as.dendrogram()
+  }
 
   # heatmap
   if(split_row_num==1) {
@@ -98,7 +105,11 @@ plot_heatmap <- function(
                   ...)
   } else {
     # color cluster dendgrams
-    dend_row <- color_branches(dend_row, k=split_row_num)
+    if(row_cluster_type=="none") {
+      dend_row <- FALSE
+    } else {
+      dend_row <- color_branches(dend_row, k=split_row_num)
+    }
     ht <- Heatmap(mat, name="Scale",
                   col=colorRamp2(color_map, color_palette),
                   row_names_gp=gpar(fontsize=row_names_size),
