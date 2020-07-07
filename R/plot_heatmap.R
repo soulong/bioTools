@@ -6,7 +6,7 @@
 #' @param matrix matrix, with unique rownames and colnames
 #' @param group vector, used to anno column or cluster_withon_group, the order is same with matrix colname
 #' @param scale_method character, scale method, one of "scale", "log1p", "none"
-#' @param row_cluster_type character, cluster row method, one of "auto",
+#' @param row_cluster_type character, cluster row method, one of "auto", "none"
 #' @param col_cluster_type character, cluster column method, one of "auto", "semi", "none"
 #' @param split_row_num integer, divide row cluster into how many sub-clusters, using cutree method
 #' @param color_map numeric vector, heatmap color mapping cut, length must be same with color_palette
@@ -33,7 +33,7 @@ plot_heatmap <- function(
   scale_method="scale",
   row_cluster_type="auto",
   col_cluster_type="auto",
-  split_row_num=1,
+  split_row_num=2,
   color_map=c(-2, 0, 2),
   color_palette=c("#377eb8", "white", "#e41a1c"),
   row_names_size=2,
@@ -131,10 +131,11 @@ plot_heatmap <- function(
     ordered_row_export <- row_order(ht)
   }
 
+
   names(ordered_row_export) <- 1:split_row_num
 
   ordered_matlist <- lapply(ordered_row_export,
-                            function(x) as_tibble(rownames_to_column(as.data.frame(mat[x, ]), "name")))
+                            function(x) as_tibble(rownames_to_column(as.data.frame(mat[x, column_order(ht)]), "name")))
   # merge list to a df
   ordered_mat <- bind_rows(ordered_matlist, .id = "cluster")
 
@@ -158,4 +159,5 @@ if(F) {
 
   plot <- plot_heatmap(matrix, group, col_cluster_type = "semi", scale_method = "scale", split_row_num = 2)
   plot$heatmap
+  plot$ordered_mat[1:5, 1:10]
 }
