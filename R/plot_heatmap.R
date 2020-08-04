@@ -17,7 +17,7 @@
 #' @param hclust_method hclust method, refer to hclust
 #' @param ... additional parameters pass to ComplexHeatmap::Heatmap
 #'
-#' @importFrom ComplexHeatmap Heatmap cluster_within_group row_order
+#' @importFrom ComplexHeatmap Heatmap cluster_within_group row_order column_order
 #' @importFrom dendextend color_branches
 #' @importFrom circlize colorRamp2
 #' @importFrom tibble rownames_to_column as_tibble
