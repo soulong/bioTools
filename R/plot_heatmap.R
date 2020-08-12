@@ -39,7 +39,7 @@ plot_heatmap <- function(
   row_names_size=2,
   column_names_size=8,
   dist_method="euclidean",
-  hclust_method="complete",
+  hclust_method="average",
   ...
 ) {
 

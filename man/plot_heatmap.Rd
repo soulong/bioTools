@@ -8,27 +8,30 @@ plot_heatmap(
   matrix,
   group = NULL,
   scale_method = "scale",
+  row_cluster_type = "auto",
   col_cluster_type = "auto",
-  split_row_num = 1,
+  split_row_num = 2,
   color_map = c(-2, 0, 2),
   color_palette = c("#377eb8", "white", "#e41a1c"),
   row_names_size = 2,
   column_names_size = 8,
   dist_method = "euclidean",
-  hclust_method = "complete",
+  hclust_method = "average",
   ...
 )
 }
 \arguments{
 \item{matrix}{matrix, with unique rownames and colnames}
 
-\item{group}{vecotr, used to anno column or cluster_withon_group, the order is same with matrix colname}
+\item{group}{vector, used to anno column or cluster_withon_group, the order is same with matrix colname}
 
 \item{scale_method}{character, scale method, one of "scale", "log1p", "none"}
 
+\item{row_cluster_type}{character, cluster row method, one of "auto", "none"}
+
 \item{col_cluster_type}{character, cluster column method, one of "auto", "semi", "none"}
 
-\item{split_row_num}{integer, divide row cluster into how many sub-clusters}
+\item{split_row_num}{integer, divide row cluster into how many sub-clusters, using cutree method}
 
 \item{color_map}{numeric vector, heatmap color mapping cut, length must be same with color_palette}
 

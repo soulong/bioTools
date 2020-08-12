@@ -6,12 +6,11 @@
 \usage{
 plot_volcano(
   res,
-  title = "Volcano of DEGs",
-  baseMean_thred = 50,
   fc_thred = 2,
   padj_thred = 0.05,
   size = 1.5,
   alpha = 0.7,
+  title = "Volcano of DEGs",
   xlim = NULL,
   ylim = NULL,
   ns_resampling = 1000,
@@ -21,21 +20,19 @@ plot_volcano(
 \arguments{
 \item{res}{a data.drame from DESeq2 result}
 
-\item{title}{plot title}
+\item{fc_thred}{foldchange cutoff, corelated to log2FoldChange column, high value mean less filter}
 
-\item{baseMean_thred}{baseMean cutoff}
-
-\item{fc_thred}{foldchange cutoff}
-
-\item{padj_thred}{p.adjust cutoff}
+\item{padj_thred}{p.adjust cutoff, corelated to padj column, high value mean less filter}
 
 \item{size}{point size}
 
 \item{alpha}{point transparency}
 
-\item{xlim}{two element numeric vector, restrict x axis}
+\item{title}{plot title}
 
-\item{ylim}{two element numeric vector, restrict y axis}
+\item{xlim}{two element numeric vector, restrict x axis, default: NULL}
+
+\item{ylim}{two element numeric vector, restrict y axis, default: NULL}
 
 \item{ns_resampling}{numeric, downsampling NS points}
 

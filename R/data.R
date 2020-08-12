@@ -28,3 +28,9 @@ NULL
 #' @name genes
 #' @format a data frame, tibble
 NULL
+
+#'  tf to target from trrust and dorothea database
+#' @docType data
+#' @name tf2target
+#' @format a data frame, tibble
+NULL
